@@ -18,13 +18,22 @@ public class CommandController {
         text = commandElements.length > 2 ? commandElements[2] : "";
     }
 
-    public void executeCommand(String command) {
+    public String executeCommand(String command) {
         parseCommand(command);
 
         switch (type) {
-            case "get" -> System.out.println(jsonDatabase.get(index));
-            case "set" -> System.out.println(jsonDatabase.set(index, text));
-            case "delete" -> System.out.println(jsonDatabase.delete(index));
+            case "get" -> {
+                return jsonDatabase.get(index);
+            }
+            case "set" -> {
+                return jsonDatabase.set(index, text);
+            }
+            case "delete" -> {
+                return jsonDatabase.delete(index);
+            }
+            default -> {
+                return "ERROR";
+            }
         }
     }
 }
