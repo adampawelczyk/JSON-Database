@@ -1,20 +1,19 @@
 package server;
 
-import server.data.CommandController;
-import server.data.JsonDatabase;
-import server.data.JsonDatabaseArray;
+import server.data.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
 public class Main {
     private static final int PORT = 23456;
 
     public static void main(String[] args) {
         System.out.println("Server started!");
-        JsonDatabase jsonDatabase = new JsonDatabaseArray(1000);
+        JsonDatabaseMap jsonDatabase = new JsonDatabaseMap();
         CommandController commandController = new CommandController(jsonDatabase);
 
         while (true) {
@@ -24,7 +23,8 @@ public class Main {
                         DataInputStream inputStream = new DataInputStream(socket.getInputStream());
                         DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream())
                 ) {
-                    String command = inputStream.readUTF();
+                    String jsonCommand = inputStream.readUTF();
+                    Command command = CommandParser.parse(jsonCommand);
                     String result = commandController.executeCommand(command);
                     outputStream.writeUTF(result);
                 }

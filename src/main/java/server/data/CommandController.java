@@ -1,38 +1,49 @@
 package server.data;
 
+import com.google.gson.Gson;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class CommandController {
-    private final JsonDatabase jsonDatabase;
-    private String type;
-    private int index;
-    private String text;
+    private final JsonDatabaseMap jsonDatabase;
 
-
-    public CommandController(JsonDatabase jsonDatabase) {
+    public CommandController(JsonDatabaseMap jsonDatabase) {
         this.jsonDatabase = jsonDatabase;
     }
 
-    public void parseCommand(String command) {
-        String[] commandElements = command.split(" ", 3);
-        type = commandElements[0];
-        index = Integer.parseInt(commandElements[1]) - 1;
-        text = commandElements.length > 2 ? commandElements[2] : "";
-    }
+    public String executeCommand(Command command) {
+        Map<String, String> response = new LinkedHashMap<>();
 
-    public String executeCommand(String command) {
-        parseCommand(command);
-
-        switch (type) {
+        switch (command.getType()) {
             case "get" -> {
-                return jsonDatabase.get(index);
+                if (jsonDatabase.get(command.getKey()).equals("No such key")) {
+                    response.put("response", "ERROR");
+                    response.put("reason", "No such key");
+                } else {
+                    response.put("response", "OK");
+                    response.put("value", jsonDatabase.get(command.getKey()));
+                }
+                return new Gson().toJson(response);
             }
             case "set" -> {
-                return jsonDatabase.set(index, text);
+                jsonDatabase.set(command.getKey(), command.getValue());
+                response.put("response", "OK");
+                return new Gson().toJson(response);
             }
             case "delete" -> {
-                return jsonDatabase.delete(index);
+                if (jsonDatabase.containsKey(command.getKey())) {
+                    jsonDatabase.delete(command.getKey());
+                    response.put("response", "OK");
+                } else {
+                    response.put("response", "ERROR");
+                    response.put("reason", "No such key");
+                }
+                return new Gson().toJson(response);
             }
             default -> {
-                return "ERROR";
+                response.put("response", "ERROR");
+                response.put("reason", "Invalid type");
+                return new Gson().toJson(response);
             }
         }
     }

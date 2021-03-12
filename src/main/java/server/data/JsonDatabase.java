@@ -1,7 +1,7 @@
 package server.data;
 
 public interface JsonDatabase {
-    String get(int index);
-    String set(int index, String value);
-    String delete(int index);
+    String get(String key);
+    String set(String key, String value);
+    String delete(String key);
 }
