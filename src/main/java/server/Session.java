@@ -22,14 +22,6 @@ public class Session implements Runnable {
         ) {
             String jsonCommand = inputStream.readUTF();
             Command command = CommandParser.parse(jsonCommand);
-
-
-            if (command.getType().equals("exit")) {
-                String responseJson = "{ \"response\": \"OK\" }";
-                outputStream.writeUTF(responseJson);
-                System.exit(0);
-            }
-
             String result = commandController.executeCommand(command);
             outputStream.writeUTF(result);
         } catch (IOException e) {
