@@ -1,13 +1,13 @@
-package server.data;
+package server;
 
 import com.google.gson.Gson;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CommandController {
-    private final JsonDatabaseMap jsonDatabase;
+    private final JsonDatabase jsonDatabase;
 
-    public CommandController(JsonDatabaseMap jsonDatabase) {
+    public CommandController(JsonDatabase jsonDatabase) {
         this.jsonDatabase = jsonDatabase;
     }
 

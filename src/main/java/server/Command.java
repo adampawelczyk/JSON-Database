@@ -1,4 +1,4 @@
-package server.data;
+package server;
 
 public class Command {
     private final String type;

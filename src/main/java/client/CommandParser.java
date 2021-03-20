@@ -1,4 +1,4 @@
-package client.data;
+package client;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
